@@ -30,6 +30,7 @@ class HomePage extends Component {
                         "Chuck Norris Quote:", quote)
                 })
                 .done();
+            //"react-native": "0.55.4",
         })
     }
 

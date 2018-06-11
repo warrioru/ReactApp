@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-    ActivityIndicator,
+    ActivityIndicator, AppRegistry,
     AsyncStorage,
 } from 'react-native';
 import {Router, Scene} from 'react-native-router-flux';
@@ -76,3 +76,5 @@ class App extends Component {
 }
 
 export default App;
+
+AppRegistry.registerComponent('main', () => App);
