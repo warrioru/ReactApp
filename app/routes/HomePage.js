@@ -5,7 +5,9 @@ import {
     Image,
     Text,
     TouchableOpacity,
-    View
+    View,
+    ImageBackground,
+    StyleSheet
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 
@@ -15,8 +17,8 @@ class HomePage extends Component {
 
     getProtectedQuote() {
         AsyncStorage.getItem('id_token').then((token) => {
-            // TODO: localhost doesn't work. Get the IP address with ifconfig.
-            fetch("http://192.168.1.3:3001/api/protected/random-quote", {
+
+            fetch("http://213.144.154.94:3001/api/protected/random-quote", {
                 method: "GET",
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -41,29 +43,90 @@ class HomePage extends Component {
         }
     }
 
+    pedidos() {
+        Actions.Pedidos();
+    }
+
+
     render() {
+        const data = [1, 2, 3, 4, 5];
         return (
             <View style={styles.container}>
-                <Image
-                    source={require('../images/chuck_norris.png')}
+                <ImageBackground
+                    source={require('../images/homePage/image1.png')}
                     style={styles.image}
-                />
-                <TouchableOpacity
-                    style={styles.buttonWrapper}
-                    onPress={this.getProtectedQuote}
                 >
-                    <Text style={styles.buttonText}>
-                        Get Chuck Norris quote!
+                    <Text style={styles.imageText} >
+                        My Tasks
                     </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.buttonWrapper}
+                </ImageBackground>
+
+                <View style={styles.container}>
+                    <View style={styles.row}>
+                        <TouchableOpacity
+                            style={[styles.box, styles.boxL]}
+                        >
+                            <Text style={styles.groupText} >
+                                Logistica
+                            </Text>
+                            <View
+                                style={[styles.littleBar,styles.cyan]}
+                            />
+
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.box, styles.boxL]}
+                        >
+                            <Text style={styles.groupText} >
+                                Reportes
+                            </Text>
+                            <View
+                                style={[styles.littleBar,styles.red]}
+                            />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.row}>
+                        <TouchableOpacity
+                            style={[styles.box, styles.boxL]}
+                            onPress={this.pedidos}
+                        >
+                            <Text style={styles.groupText} >
+                                Pedidos
+                            </Text>
+                            <View
+                                style={[styles.littleBar,styles.yellow]}
+                            />
+                            <View
+                                style={styles.topBar}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.box, styles.boxL]}
+                            onPress={this.userLogout}
+                        >
+                            <Text style={styles.groupText} >
+                                Cuentas
+                            </Text>
+                            <View
+                                style={[styles.littleBar,styles.purple]}
+                            />
+                            <View
+                                style={styles.topBar}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+
+                {/*<TouchableOpacity
+                    style={styles.button}
                     onPress={this.userLogout}
                 >
                     <Text style={styles.buttonText} >
                         Log out
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
             </View>
         );
     }

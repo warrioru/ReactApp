@@ -7,6 +7,9 @@ import {Router, Scene} from 'react-native-router-flux';
 
 import Authentication from './routes/Authentication';
 import HomePage from './routes/HomePage';
+import Pedidos from './routes/Pedidos';
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class App extends Component {
 
@@ -16,6 +19,8 @@ class App extends Component {
             hasToken: false,
             isLoaded: false
         }
+        console.ignoredYellowBox = ['Remote debugger'];
+
     }
 
     componentDidMount() {
@@ -56,6 +61,12 @@ class App extends Component {
                             initial={this.state.hasToken}
                             key="HomePage"
                             title="Home Page"
+                        />
+                        <Scene
+                            component={Pedidos}
+                            hideNavBar={false}
+                            key="Pedidos"
+                            title="Pedidos"
                         />
                     </Scene>
                 </Router>
