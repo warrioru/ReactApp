@@ -25,6 +25,7 @@ const mark = require("../images/login/logo.jpg");
 const lockIcon = require("../images/login/login1_lock.png");
 const personIcon = require("../images/login/login1_person.png");
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {Actions} from 'react-native-router-flux';
 import styles from './styles';
 
@@ -113,8 +114,8 @@ class Authentication extends Component {
 
     render() {
         return (
-            <ScrollView style={styles.container} keyboardShouldPersistTaps='always' keyboardShouldPersistTaps='always'>
-                <ImageBackground source={background}  style={styles.background} resizeMode="cover" >
+            <KeyboardAvoidingView behavior="padding">
+            <ImageBackground source={background} style={styles.background} resizeMode="cover">
                     <View style={styles.markWrap}>
                         <Image source={mark} style={styles.mark} resizeMode="contain" />
                     </View>
@@ -165,7 +166,7 @@ class Authentication extends Component {
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>
-            </ScrollView>
+            </KeyboardAvoidingView>
         );
     }
 }
