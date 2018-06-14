@@ -17,22 +17,19 @@ import {
 
 
 import {Actions} from 'react-native-router-flux';
-import DatePicker from 'react-native-datepicker';
-import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Iconi from 'react-native-vector-icons/Ionicons';
+import ModalSelector from 'react-native-modal-selector';
 
 import styles from './styles';
 
 class Logistica extends Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.state = {
             pedidos: [],
             ViewArray: [],
-            Disable_Button: false
+            Disable_Button: false,
         }
 
         this.animatedValue = new Animated.Value(0);
@@ -40,6 +37,10 @@ class Logistica extends Component {
 
         //get logistica
         this.getLogisticaRest();
+
+    }
+
+    componentWillUnmount() {
 
     }
 
@@ -90,6 +91,31 @@ class Logistica extends Component {
         });
     }
 
+    updateEstado(id, key) {
+
+        fetch("http://213.144.154.94/rest/updateEstado.php", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: id,
+                key: key
+            })
+        })
+            .then((response) => response.json())
+            .then((responseData) => {
+                if (responseData.success == 1) {
+                    //this.dismissModal();
+                    Actions.refresh({ key: Math.random()});
+                } else {
+                    Alert.alert("", "Problema Interno. Intentar mas tarde")
+                }
+            })
+            .done();
+    }
+
     onSelectedItemsChange = (selectedItems) => {
         this.setState({ selectedItems });
     }
@@ -104,6 +130,23 @@ class Logistica extends Component {
 
 
     render() {
+        let index = 0;
+        const data0 = [
+            { key: index++, section: true, label: 'Estado' },
+            { key: '1', label: 'En Ruta' },
+            { key: '2', label: 'Entregado' }
+        ];
+        const data1 = [
+            { key: index++, section: true, label: 'Estado' },
+            { key: '0', label: 'En Espera' },
+            { key: '2', label: 'Entregado' }
+        ];
+        const data2 = [
+            { key: index++, section: true, label: 'Estado' },
+            { key: '0', label: 'En Espera' },
+            { key: '1', label: 'En Ruta' }
+        ];
+
         const AnimationValue = this.animatedValue.interpolate(
             {
                 inputRange: [ 0, 1 ],
@@ -116,11 +159,14 @@ class Logistica extends Component {
             var item = array[0]
             var pedido = array[1]
             var background = '#FF0000';
+            var dataUsar = data0;
 
             if (pedido.estado == 1) {
                 background = '#F1C038';
+                dataUsar = data1;
             } else if (pedido.estado == 2) {
                 background = '#14CC30';
+                dataUsar = data2;
             }
 
             if(( item ) == this.Array_Value_Index)
@@ -135,8 +181,7 @@ class Logistica extends Component {
                         <TouchableOpacity
                             activeOpacity = { 0.7 }
                             style = { styles.TouchableOpacityStyle }
-                            disabled = { this.state.Disable_Button }
-                            onPress = { this.Add_New_View_Function }>
+                            disabled = { this.state.Disable_Button } >
 
                             <Image
                                 source={{uri : 'http://www.bajrangreadymade.com/img/user.png'}}
@@ -146,7 +191,12 @@ class Logistica extends Component {
                         </TouchableOpacity>
 
                         {/*<Text style = { styles.View_Inside_Text } > This Is Row { item.Array_Value_Index } </Text>*/}
-                        <TouchableOpacity>
+                        <View style={styles.container}>
+                        <ModalSelector
+                            data={dataUsar}
+                            initValue="Select something yummy!"
+                            cancelText='Cancelar'
+                            >
 
                             <Text style={styles.View_Inside_Text} >
                                 Cliente: {pedido.nombreCliente}
@@ -158,7 +208,22 @@ class Logistica extends Component {
                                 Encargado: {pedido.id_encargado_fk}
                             </Text>
 
-                        </TouchableOpacity>
+                        </ModalSelector>
+                        </View>
+
+                        {/*<TouchableOpacity onPress = { this.updateEstado(pedido.id) }>*/}
+
+                            {/*<Text style={styles.View_Inside_Text} >*/}
+                                {/*Cliente: {pedido.nombreCliente}*/}
+                            {/*</Text>*/}
+                            {/*<Text style={styles.View_Inside_Text} >*/}
+                                {/*Numero Factura: {pedido.numFactura}*/}
+                            {/*</Text>*/}
+                            {/*<Text style={styles.View_Inside_Text} >*/}
+                                {/*Encargado: {pedido.id_encargado_fk}*/}
+                            {/*</Text>*/}
+
+                        {/*</TouchableOpacity>*/}
 
 
                     </Animated.View>
@@ -176,8 +241,7 @@ class Logistica extends Component {
                         <TouchableOpacity
                             activeOpacity = { 0.7 }
                             style = { styles.TouchableOpacityStyle }
-                            disabled = { this.state.Disable_Button }
-                            onPress = { this.Add_New_View_Function }>
+                            disabled = { this.state.Disable_Button } >
 
                             <Image
                                 source={{uri : 'http://www.bajrangreadymade.com/img/user.png'}}
@@ -187,7 +251,13 @@ class Logistica extends Component {
                         </TouchableOpacity>
 
                         {/*<Text style = { styles.View_Inside_Text } > This Is Row { item.Array_Value_Index } </Text>*/}
-                        <TouchableOpacity>
+                        <View style={styles.container}>
+                        <ModalSelector
+                            data={dataUsar}
+                            initValue="Select something yummy!"
+                            cancelText='Cancelar'
+                            onChange={(option)=>{ this.updateEstado(pedido.id, option.key) }}
+                        >
 
                             <Text style={styles.View_Inside_Text} >
                                 Cliente: {pedido.nombreCliente}
@@ -199,7 +269,22 @@ class Logistica extends Component {
                                 Encargado: {pedido.id_encargado_fk}
                             </Text>
 
-                        </TouchableOpacity>
+                        </ModalSelector>
+                        </View>
+
+                        {/*<TouchableOpacity onPress = { this.updateEstado(pedido.id) }>*/}
+
+                            {/*<Text style={styles.View_Inside_Text} >*/}
+                                {/*Cliente: {pedido.nombreCliente}*/}
+                            {/*</Text>*/}
+                            {/*<Text style={styles.View_Inside_Text} >*/}
+                                {/*Numero Factura: {pedido.numFactura}*/}
+                            {/*</Text>*/}
+                            {/*<Text style={styles.View_Inside_Text} >*/}
+                                {/*Encargado: {pedido.id_encargado_fk}*/}
+                            {/*</Text>*/}
+
+                        {/*</TouchableOpacity>*/}
 
                     </View>
 

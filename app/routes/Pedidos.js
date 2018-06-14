@@ -22,8 +22,11 @@ const personIcon = require("../images/login/login1_person.png");
 import {Actions} from 'react-native-router-flux';
 import DatePicker from 'react-native-datepicker';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Iconi from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+//import FontAwesome from '@expo/vector-icons/FontAwesome';
+//import Ionicons from '@expo/vector-icons/Ionicons';
 
 import styles from './styles';
 
@@ -42,6 +45,7 @@ class Pedidos extends Component {
             plazoDias: null,
             showTheThing: false,
             nombreVendedor: null,
+            isReady: false,
         }
     }
 
@@ -56,7 +60,7 @@ class Pedidos extends Component {
     _renderRightButton = () => {
         return(
             <TouchableOpacity style={{padding: 5}} onPress={() => this.handleIconTouch() } >
-                <Icon name="check" size={30} color='black' />
+                <FontAwesome name="check" size={30} color='black' />
             </TouchableOpacity>
         );
     };
@@ -129,6 +133,7 @@ class Pedidos extends Component {
 
 
     render() {
+
         const { selectedItems } = this.state;
 
         const items = [
@@ -199,7 +204,7 @@ class Pedidos extends Component {
                 <View style={styles.wrapper}>
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
-                            <Icon name="user" size={30} color="#900" />
+                            <FontAwesome name="user" size={30} color="#900" />
                         </View>
                         <TextInput
                             placeholderTextColor="#989898"
@@ -214,7 +219,7 @@ class Pedidos extends Component {
                     </View>
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
-                            <Icon name="address-card" size={20} color="#900" />
+                            <FontAwesome name="address-card" size={20} color="#900" />
                         </View>
                         <TextInput
                             placeholderTextColor="#989898"
@@ -229,7 +234,7 @@ class Pedidos extends Component {
                     </View>
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
-                            <Icon name="map-marker" size={30} color="#900" />
+                            <FontAwesome name="map-marker" size={30} color="#900" />
                         </View>
                         <TextInput
                             placeholderTextColor="#989898"
@@ -245,7 +250,7 @@ class Pedidos extends Component {
 
                     <View style={styles.inputWrap3}>
                         <View style={styles.iconWrap}>
-                            <Iconi name='ios-wine' size={35} color='#900' />
+                            <Ionicons name='ios-wine' size={35} color='#900' />
                         </View>
                         <View style={styles.container}>
                             <SectionedMultiSelect
@@ -316,7 +321,7 @@ class Pedidos extends Component {
 
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
-                            <Icon name="shopping-cart" size={25} color="#900" />
+                            <FontAwesome name="shopping-cart" size={25} color="#900" />
                         </View>
                         <Picker
                             selectedValue={this.state.formaPago}
@@ -339,7 +344,7 @@ class Pedidos extends Component {
                     { renderIf(this.state.showTheThing)(
                         <View style={styles.inputWrap}>
                             <View style={styles.iconWrap}>
-                                <Icon name="sun-o" size={25} color="#900" />
+                                <FontAwesome name="sun-o" size={25} color="#900" />
                             </View>
                             <Picker
                                 selectedValue={this.state.plazoDias}
