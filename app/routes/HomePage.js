@@ -48,6 +48,10 @@ class HomePage extends Component {
         Actions.Pedidos();
     }
 
+    logistica() {
+        Actions.Logistica();
+    }
+
 
     render() {
         const data = [1, 2, 3, 4, 5];
@@ -66,6 +70,7 @@ class HomePage extends Component {
                     <View style={styles.row}>
                         <TouchableOpacity
                             style={[styles.box, styles.boxL]}
+                            onPress={this.logistica}
                         >
                             <Text style={styles.groupText} >
                                 Logistica

@@ -1,4 +1,4 @@
-import renderIf from '../renderif'
+import renderIf from '../renderif';
 import React, {Component} from 'react';
 import {
     AsyncStorage,

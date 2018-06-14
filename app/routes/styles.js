@@ -1,5 +1,5 @@
 
-import {Dimensions, StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet, Platform} from 'react-native';
 
 const { width, height } = Dimensions.get("window");
 
@@ -218,5 +218,42 @@ export default styles = StyleSheet.create({
     },
     padding: {
       padding: 10,
+    },
+    MainContainer:
+        {
+            flex: 1,
+            backgroundColor: '#eee',
+            justifyContent: 'center',
+            paddingTop: (Platform.OS == 'ios') ? 20 : 0
+        },
+
+    Animated_View_Style:
+        {
+            height: 150,
+            alignItems: 'flex-start',
+            margin: 4
+        },
+
+    View_Inside_Text:
+        {
+            color: '#fff',
+            fontSize: 20,
+            margin: 5
+        },
+
+    TouchableOpacityStyle:{
+
+        position: 'absolute',
+        width: 55,
+        height: 55,
+        right: 5,
+        top: 5
+    },
+
+    FloatingButtonStyle: {
+
+        resizeMode: 'contain',
+        width: 55,
+        height: 55,
     },
 });
