@@ -237,9 +237,22 @@ export default styles = StyleSheet.create({
     View_Inside_Text:
         {
             color: '#fff',
-            fontSize: 20,
+            fontSize: 18,
             margin: 5
         },
+    View_Inside_Text_Left: {
+        color: '#fff',
+        fontSize: 18,
+        textAlign: 'left',
+
+    },
+    View_Inside_Text_Right: {
+        color: '#fff',
+        fontSize: 18,
+        textAlign: 'right',
+        alignSelf: 'flex-end'
+
+    },
 
     TouchableOpacityStyle:{
 
@@ -256,4 +269,13 @@ export default styles = StyleSheet.create({
         width: 55,
         height: 55,
     },
+    TouchableContainer: {
+        flexDirection: 'row',
+    },
+    extraContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'stretch',
+        justifyContent: 'flex-end'
+    }
 });

@@ -7,11 +7,13 @@ import {
     Text,
     TouchableOpacity,
     View,
+    Keyboard,
     ImageBackground,
     StyleSheet,
     TextInput,
     ScrollView,
-    Picker
+    Picker,
+    Switch
 } from 'react-native';
 
 const mark = require("../images/login/logo.jpg");
@@ -24,6 +26,8 @@ import DatePicker from 'react-native-datepicker';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Prompt from 'react-native-prompt';
+
 
 //import FontAwesome from '@expo/vector-icons/FontAwesome';
 //import Ionicons from '@expo/vector-icons/Ionicons';
@@ -36,9 +40,14 @@ class Pedidos extends Component {
         super();
         this.state = {
             nombreCliente: null,
+            rucCliente: null,
+            emailCliente: null,
+            tipoCliente: null,
+            consignacion: false,
             dirCliente: null,
             referencia: null,
             selectedItems: [],
+            readyItems: [],
             fechaEntrega: null,
             fechaFacturacion: null,
             formaPago: 'contado',
@@ -46,6 +55,10 @@ class Pedidos extends Component {
             showTheThing: false,
             nombreVendedor: null,
             isReady: false,
+            promptVisible: false,
+            idVino: null,
+            cantidadTemp: null,
+            duplicateIds: []
         }
     }
 
@@ -68,13 +81,13 @@ class Pedidos extends Component {
     handleIconTouch = () => {
         console.log('Touched!');
 
-        if (this.state.nombreCliente != null && this.state.dirCliente != null &&
-            this.state.referencia != null && this.state.fechaEntrega != null &&
-            this.state.fechaFacturacion != null && this.state.formaPago != null &&
+        /*if (this.state.nombreCliente != null && this.state.rucCliente != null &&
+            this.state.emailCliente != null && this.state.dirCliente != null &&
+            this.state.fechaEntrega != null && this.state.formaPago != null &&
             this.state.nombreVendedor != null && this.state.selectedItems.length != 0
-        ) {
+        ) {*/
 
-            fetch("http://213.144.154.94/rest/jsonPedidos.php", {
+            fetch("http://213.144.154.249/rest/jsonPedido.php", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -82,9 +95,13 @@ class Pedidos extends Component {
                 },
                 body: JSON.stringify({
                     nombreCliente: this.state.nombreCliente,
+                    rucCliente: this.state.rucCliente,
+                    emailCliente: this.state.emailCliente,
                     dirCliente: this.state.dirCliente,
                     referencia: this.state.referencia,
-                    selectedItems: this.state.selectedItems,
+                    tipoCliente: this.state.tipoCliente,
+                    consignacion: this.state.consignacion,
+                    selectedItems: this.state.readyItems,
                     fechaEntrega: this.state.fechaEntrega,
                     fechaFacturacion: this.state.fechaFacturacion,
                     formaPago: this.state.formaPago,
@@ -95,15 +112,16 @@ class Pedidos extends Component {
                 .then((response) => response.json())
                 .then((responseData) => {
                     Alert.alert(
-                        "Email enviado!"
+                        "Email enviado!" + JSON.stringify(responseData)
                         ),
-                        Actions.HomePage();
+                        Keyboard.dismiss()
+                        //Actions.HomePage();
                 })
                 .done();
 
-        } else {
+        /*} else {
             Alert.alert("Faltan campos por llenar.");
-        }
+        }*/
     }
 
     async userLogout() {
@@ -116,8 +134,66 @@ class Pedidos extends Component {
         }
     }
 
+    //to get the diff between two arrays
+    arr_diff (a1, a2) {
+
+        var a = [], diff = [];
+
+        for (var i = 0; i < a1.length; i++) {
+            a[a1[i]] = true;
+        }
+
+        for (var i = 0; i < a2.length; i++) {
+            if (a[a2[i]]) {
+                delete a[a2[i]];
+            } else {
+                a[a2[i]] = true;
+            }
+        }
+
+        for (var k in a) {
+            diff.push(k);
+        }
+
+        return diff;
+    }
+
+    //to delete a value with a property inside an array
+    findAndRemove(array, property, value) {
+        array.forEach(function(result, index) {
+            if(result[property] === value) {
+                //Remove from array
+                array.splice(index, 1);
+            }
+        });
+    }
+
+
+
     onSelectedItemsChange = (selectedItems) => {
-        this.setState({ selectedItems });
+        this.setState({ selectedItems })
+        this.setState({ idVino: selectedItems[selectedItems.length - 1] })
+
+        if (selectedItems.length < this.state.readyItems.length) {
+            var idBorrada = this.arr_diff(selectedItems, this.state.duplicateIds)
+
+            this.state.readyItems.map((item, index) => {
+                if(item.id.toString() === idBorrada.toString()) {
+                    this.state.readyItems.splice(index, 1)
+                }
+            })
+            this.state.duplicateIds = selectedItems
+            alert(JSON.stringify(this.state.readyItems))
+        } else {
+            this.setState({ promptVisible: true })
+        }
+    }
+
+    handlePromptInput = (value) => {
+        this.state.readyItems.push({id: this.state.idVino, amount: value})
+        this.state.duplicateIds.push(this.state.idVino)
+
+        this.setState({ promptVisible: false })
     }
 
     handlePickerChange = (formaPago, itemValue) => {
@@ -139,59 +215,59 @@ class Pedidos extends Component {
         const items = [
             {
                 name: "Fruits",
-                id: 0,
+                id: "0",
                 children: [{
-                    name: "Apple",
-                    id: 10,
+                    name: "Apple - $19.99",
+                    id: "10",
                 },{
-                    name: "Strawberry",
-                    id: 17,
+                    name: "Strawberry  - $19.99",
+                    id: "17",
                 },{
-                    name: "Pineapple",
-                    id: 13,
+                    name: "Pineapple  - $19.99",
+                    id: "13",
                 },{
-                    name: "Banana",
-                    id: 14,
+                    name: "Banana  - $19.99",
+                    id: "14",
                 },{
-                    name: "Watermelon",
-                    id: 15,
+                    name: "Watermelon  - $19.99",
+                    id: "15",
                 },{
-                    name: "Kiwi fruit",
-                    id: 16,
+                    name: "Kiwi fruit  - $19.99",
+                    id: "16",
                 }]
             },
             {
                 name: "Gems",
-                id: 1,
+                id: "1",
                 children: [{
-                    name: "Quartz",
-                    id: 20,
+                    name: "Quartz  - $19.99",
+                    id: "20",
                 },{
-                    name: "Zircon",
-                    id: 21,
+                    name: "Zircon  - $19.99",
+                    id: "21",
                 },{
-                    name: "Sapphire",
-                    id: 22,
+                    name: "Sapphire  - $19.99",
+                    id: "22",
                 },{
-                    name: "Topaz",
-                    id: 23,
+                    name: "Topaz  - $19.99",
+                    id: "23",
                 }]
             },
             {
                 name: "Plants",
-                id: 2,
+                id: "2",
                 children: [{
                     name: "Mother In Law\'s Tongue",
-                    id: 30,
+                    id: "30",
                 },{
-                    name: "Yucca",
-                    id: 31,
+                    name: "Yucca  - $19.99",
+                    id: "31",
                 },{
-                    name: "Monsteria",
-                    id: 32,
+                    name: "Monsteria  - $19.99",
+                    id: "32",
                 },{
-                    name: "Palm",
-                    id: 33,
+                    name: "Palm  - $19.99",
+                    id: "33",
                 }]
             },
         ];
@@ -217,6 +293,40 @@ class Pedidos extends Component {
                             value={this.state.nombreCliente}
                         />
                     </View>
+
+                    <View style={styles.inputWrap}>
+                        <View style={styles.iconWrap}>
+                            <FontAwesome name="user" size={30} color="#900" />
+                        </View>
+                        <TextInput
+                            placeholderTextColor="#989898"
+                            style={styles.input}
+                            editable={true}
+                            onChangeText={(rucCliente) => this.setState({rucCliente})}
+                            placeholder='CI / RUC Cliente'
+                            ref='rucCliente'
+                            returnKeyType='next'
+                            keyboardType = 'numeric'
+                            value={this.state.rucCliente}
+                        />
+                    </View>
+
+                    <View style={styles.inputWrap}>
+                        <View style={styles.iconWrap}>
+                            <FontAwesome name="user" size={30} color="#900" />
+                        </View>
+                        <TextInput
+                            placeholderTextColor="#989898"
+                            style={styles.input}
+                            editable={true}
+                            onChangeText={(emailCliente) => this.setState({emailCliente})}
+                            placeholder='Email Cliente'
+                            ref='emailCliente'
+                            returnKeyType='next'
+                            value={this.state.emailCliente}
+                        />
+                    </View>
+
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
                             <FontAwesome name="address-card" size={20} color="#900" />
@@ -247,6 +357,39 @@ class Pedidos extends Component {
                             value={this.state.referencia}
                         />
                     </View>
+
+                    <View style={styles.inputWrap}>
+                        <View style={styles.iconWrap}>
+                            <FontAwesome name="shopping-cart" size={25} color="#900" />
+                        </View>
+                        <Picker
+                            selectedValue={this.state.tipoCliente}
+                            style={{ width: '100%' }}
+                            onValueChange={(itemValue, itemIndex) => {
+                                this.setState({tipoCliente: itemValue});
+                            }}>
+                            <Picker.Item label="HORECA" value="horeca" />
+                            <Picker.Item label="Relacionadas" value="relacionadas" />
+                            <Picker.Item label="Institucionales" value="institucionales" />
+                        </Picker>
+                    </View>
+
+                    <View style = {styles.inputWrap}>
+                        <View style={styles.iconWrap}>
+                            <FontAwesome name="shopping-cart" size={25} color="#900"
+                                         style={{marginBottom:15}}
+                            />
+                        </View>
+                        <Text style={{fontSize: 18}}> En consignacion? </Text>
+                        <Switch
+                            onValueChange = {(itemValue) => {
+                                this.setState({consignacion: itemValue});
+                            }}
+                            value = {this.state.consignacion}
+                            style={{marginBottom:15}}
+                        />
+                    </View>
+
 
                     <View style={styles.inputWrap3}>
                         <View style={styles.iconWrap}>
@@ -293,6 +436,7 @@ class Pedidos extends Component {
                     />
                     </View>
 
+                    { renderIf(!this.state.consignacion)(
                     <View style={styles.inputWrap2}>
                     <DatePicker
                         style={{width: "95%"}}
@@ -318,6 +462,7 @@ class Pedidos extends Component {
                         onDateChange={(fechaFacturacion) => {this.setState({fechaFacturacion: fechaFacturacion})}}
                     />
                     </View>
+                    )}
 
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
@@ -370,8 +515,16 @@ class Pedidos extends Component {
                         Log out
                     </Text>
                 </TouchableOpacity>*/}
+                <Prompt
+                    title="Cantidad"
+                    placeholder="Cantidad"
+                    visible={this.state.promptVisible}
+                    onCancel={() => this.setState({ promptVisible: false })}
+                    onSubmit={this.handlePromptInput}/>
             </View>
             </ScrollView>
+
+
         );
     }
 }

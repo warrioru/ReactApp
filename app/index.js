@@ -8,7 +8,7 @@ import {Router, Scene} from 'react-native-router-flux';
 import Authentication from './routes/Authentication';
 import HomePage from './routes/HomePage';
 import Pedidos from './routes/Pedidos';
-import Logistica from './routes/Logistica';
+import Entregas from './routes/Entregas';
 import { YellowBox } from 'react-native';
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -70,10 +70,10 @@ class App extends Component {
                             title="Pedidos"
                         />
                         <Scene
-                            component={Logistica}
+                            component={Entregas}
                             hideNavBar={false}
-                            key="Logistica"
-                            title="Logistica"
+                            key="Entregas"
+                            title="Entregas"
                         />
                     </Scene>
                 </Router>

@@ -48,8 +48,8 @@ class HomePage extends Component {
         Actions.Pedidos();
     }
 
-    logistica() {
-        Actions.Logistica();
+    entregas() {
+        Actions.Entregas();
     }
 
 
@@ -70,10 +70,10 @@ class HomePage extends Component {
                     <View style={styles.row}>
                         <TouchableOpacity
                             style={[styles.box, styles.boxL]}
-                            onPress={this.logistica}
+                            onPress={this.entregas}
                         >
                             <Text style={styles.groupText} >
-                                Logistica
+                                Entregas
                             </Text>
                             <View
                                 style={[styles.littleBar,styles.cyan]}
@@ -84,7 +84,7 @@ class HomePage extends Component {
                             style={[styles.box, styles.boxL]}
                         >
                             <Text style={styles.groupText} >
-                                Reportes
+                                Bitacora
                             </Text>
                             <View
                                 style={[styles.littleBar,styles.red]}

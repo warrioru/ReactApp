@@ -21,7 +21,7 @@ import ModalSelector from 'react-native-modal-selector';
 
 import styles from './styles';
 
-class Logistica extends Component {
+class Entregas extends Component {
 
     constructor(props){
         super(props);
@@ -45,7 +45,7 @@ class Logistica extends Component {
     }
 
     getLogisticaRest() {
-        fetch("http://213.144.154.94/rest/jsonLogistica.php", {
+        fetch("http://213.144.154.249/rest/jsonLogistica.php", {
             method: "GET",
             headers: {
                 'Accept': 'application/json',
@@ -93,7 +93,7 @@ class Logistica extends Component {
 
     updateEstado(id, key) {
 
-        fetch("http://213.144.154.94/rest/updateEstado.php", {
+        fetch("http://213.144.154.249/rest/updateEstado.php", {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
@@ -132,17 +132,17 @@ class Logistica extends Component {
     render() {
         let index = 0;
         const data0 = [
-            { key: index++, section: true, label: 'Estado' },
+            { key: index++, section: true, label: 'Estado Actual: En Espera' },
             { key: '1', label: 'En Ruta' },
             { key: '2', label: 'Entregado' }
         ];
         const data1 = [
-            { key: index++, section: true, label: 'Estado' },
+            { key: index++, section: true, label: 'Estado Actual: En Ruta' },
             { key: '0', label: 'En Espera' },
             { key: '2', label: 'Entregado' }
         ];
         const data2 = [
-            { key: index++, section: true, label: 'Estado' },
+            { key: index++, section: true, label: 'Estado Actual: Entregado' },
             { key: '0', label: 'En Espera' },
             { key: '1', label: 'En Ruta' }
         ];
@@ -160,13 +160,16 @@ class Logistica extends Component {
             var pedido = array[1]
             var background = '#FF0000';
             var dataUsar = data0;
+            var estadoActual = 'En Espera';
 
             if (pedido.estado == 1) {
                 background = '#F1C038';
                 dataUsar = data1;
+                estadoActual = 'En Ruta';
             } else if (pedido.estado == 2) {
                 background = '#14CC30';
                 dataUsar = data2;
+                estadoActual = 'Entregado';
             }
 
             if(( item ) == this.Array_Value_Index)
@@ -191,21 +194,28 @@ class Logistica extends Component {
                         </TouchableOpacity>
 
                         {/*<Text style = { styles.View_Inside_Text } > This Is Row { item.Array_Value_Index } </Text>*/}
-                        <View style={styles.container}>
+                        <View style={styles.extraContainer}>
                         <ModalSelector
                             data={dataUsar}
+                            touchableStyle={styles.TouchableContainer}
                             initValue="Select something yummy!"
                             cancelText='Cancelar'
                             >
 
                             <Text style={styles.View_Inside_Text} >
-                                Cliente: {pedido.nombreCliente}
+                                {pedido.nombreCliente}
                             </Text>
                             <Text style={styles.View_Inside_Text} >
-                                Numero Factura: {pedido.numFactura}
+                                Factura: {pedido.numFactura}
                             </Text>
                             <Text style={styles.View_Inside_Text} >
-                                Encargado: {pedido.id_encargado_fk}
+                                Vendedor: {pedido.nombreVendedor}
+                            </Text>
+                            <Text style={styles.View_Inside_Text_Left} >
+                                {pedido.fechaEntrega}
+                            </Text>
+                            <Text style={styles.View_Inside_Text_Right} >
+                                {estadoActual}
                             </Text>
 
                         </ModalSelector>
@@ -251,22 +261,29 @@ class Logistica extends Component {
                         </TouchableOpacity>
 
                         {/*<Text style = { styles.View_Inside_Text } > This Is Row { item.Array_Value_Index } </Text>*/}
-                        <View style={styles.container}>
+                        <View style={styles.extraContainer}>
                         <ModalSelector
                             data={dataUsar}
+                            touchableStyle={styles.TouchableContainer}
                             initValue="Select something yummy!"
                             cancelText='Cancelar'
                             onChange={(option)=>{ this.updateEstado(pedido.id, option.key) }}
                         >
 
                             <Text style={styles.View_Inside_Text} >
-                                Cliente: {pedido.nombreCliente}
+                                {pedido.nombreCliente}
                             </Text>
                             <Text style={styles.View_Inside_Text} >
-                                Numero Factura: {pedido.numFactura}
+                                Factura: {pedido.numFactura}
                             </Text>
                             <Text style={styles.View_Inside_Text} >
-                                Encargado: {pedido.id_encargado_fk}
+                                Vendedor: {pedido.nombreVendedor}
+                            </Text>
+                            <Text style={styles.View_Inside_Text_Left} >
+                                {pedido.fechaEntrega}
+                            </Text>
+                            <Text style={styles.View_Inside_Text_Right} >
+                                {estadoActual}
                             </Text>
 
                         </ModalSelector>
@@ -318,4 +335,4 @@ class Logistica extends Component {
     }
 }
 
-export default Logistica;
+export default Entregas;
