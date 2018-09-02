@@ -231,7 +231,8 @@ export default styles = StyleSheet.create({
         {
             height: 150,
             alignItems: 'flex-start',
-            margin: 4
+            margin: 4,
+            borderRadius: 10
         },
 
     View_Inside_Text:
@@ -277,5 +278,16 @@ export default styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'stretch',
         justifyContent: 'flex-end'
+    },
+    ModalPosition: {
+        marginTop: 22,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    ViewInsideModal: {
+        width: 300,
+        height: 300
     }
 });

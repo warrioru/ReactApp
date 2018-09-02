@@ -33,6 +33,11 @@
   "jest": {
     "preset": "react-native"
   },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
+  },
   "main": "index.js",
   "repository": {
     "type": "git",

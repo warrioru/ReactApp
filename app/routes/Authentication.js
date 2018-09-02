@@ -83,7 +83,7 @@ class Authentication extends Component {
     userLogin() {
         if (this.state.username && this.state.password) {
 
-            fetch("http://213.144.154.249/rest/jsonlogin2.php", {
+            fetch("http://213.144.154.187/rest/jsonlogin2.php", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',

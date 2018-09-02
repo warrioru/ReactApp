@@ -59,7 +59,7 @@ class App extends Component {
                         <Scene
                             component={HomePage}
                             hideNavBar={true}
-                            initial={this.state.hasToken}
+
                             key="HomePage"
                             title="Home Page"
                         />
@@ -72,6 +72,7 @@ class App extends Component {
                         <Scene
                             component={Entregas}
                             hideNavBar={false}
+                            initial={this.state.hasToken}
                             key="Entregas"
                             title="Entregas"
                         />

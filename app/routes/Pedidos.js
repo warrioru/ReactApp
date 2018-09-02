@@ -79,15 +79,15 @@ class Pedidos extends Component {
     };
 
     handleIconTouch = () => {
-        console.log('Touched!');
 
-        /*if (this.state.nombreCliente != null && this.state.rucCliente != null &&
+        if (this.state.nombreCliente != null && this.state.rucCliente != null &&
             this.state.emailCliente != null && this.state.dirCliente != null &&
             this.state.fechaEntrega != null && this.state.formaPago != null &&
-            this.state.nombreVendedor != null && this.state.selectedItems.length != 0
-        ) {*/
-
-            fetch("http://213.144.154.249/rest/jsonPedido.php", {
+            this.state.nombreVendedor != null && this.state.selectedItems.length != 0 &&
+            this.state.tipoCliente != null
+        ) {
+            Alert.alert(this.state.tipoCliente)
+            fetch("http://213.144.154.187/rest/jsonPedido.php", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -119,9 +119,9 @@ class Pedidos extends Component {
                 })
                 .done();
 
-        /*} else {
+        } else {
             Alert.alert("Faltan campos por llenar.");
-        }*/
+        }
     }
 
     async userLogout() {
@@ -366,7 +366,9 @@ class Pedidos extends Component {
                             selectedValue={this.state.tipoCliente}
                             style={{ width: '100%' }}
                             onValueChange={(itemValue, itemIndex) => {
-                                this.setState({tipoCliente: itemValue});
+                                this.setState({tipoCliente: itemValue})
+                                this.state.tipoCliente = itemValue
+                                console.log(this.state.tipoCliente)
                             }}>
                             <Picker.Item label="HORECA" value="horeca" />
                             <Picker.Item label="Relacionadas" value="relacionadas" />
@@ -494,7 +496,11 @@ class Pedidos extends Component {
                             <Picker
                                 selectedValue={this.state.plazoDias}
                                 style={{ width: '100%' }}
-                                onValueChange={(itemValue, itemIndex) => this.setState({plazoDias: itemValue})}>
+                                onValueChange={(itemValue, itemIndex) => {
+                                    this.setState({plazoDias: itemValue});
+                                    this.state.plazoDias = itemValue
+                                } }
+                            >
                                 <Picker.Item label="15 dias" value="15" />
                                 <Picker.Item label="30 dias" value="30" />
                                 <Picker.Item label="45 dias" value="45" />
