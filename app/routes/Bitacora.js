@@ -24,7 +24,7 @@ import styles from './styles';
 import EntregasCard from "../components/EntregasCard";
 import ModalInfo from "../components/ModalInfo";
 
-class Entregas extends Component {
+class Bitacora extends Component {
 
     constructor(props){
         super(props);
@@ -309,18 +309,18 @@ class Entregas extends Component {
 
         return (
             <View style = { styles.MainContainer }>
-                    <Modal
-                        animationType={'slide'}
-                        transparent={false}
-                        visible={this.state.modalVisible}
-                        onRequestClose={() => {
-                            alert('Modal has been closed.');
-                        }}>
-                        <ModalInfo
-                            entrega={this.state.entregaSelected}
-                            callback={this.setModalVisible}
-                        />
-                    </Modal>
+                <Modal
+                    animationType={'slide'}
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => {
+                        alert('Modal has been closed.');
+                    }}>
+                    <ModalInfo
+                        entrega={this.state.entregaSelected}
+                        callback={this.setModalVisible}
+                    />
+                </Modal>
 
                 <ScrollView>
                     <View style = {{ flex: 1, padding: 2 }}>
@@ -343,7 +343,7 @@ class Entregas extends Component {
 
                     <View style = {{ flex: 1, padding: 2 }}>
                         { renderIf(this.state.loadedCompletos)(
-                        <Text style={styles.textoCompleto}>Entregas ya completas: </Text>
+                            <Text style={styles.textoCompleto}>Entregas ya completas: </Text>
                         )}
                         {
                             Render_Animated_View_Completed
@@ -356,4 +356,4 @@ class Entregas extends Component {
     }
 }
 
-export default Entregas;
+export default Bitacora;

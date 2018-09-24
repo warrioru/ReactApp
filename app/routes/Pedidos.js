@@ -62,7 +62,7 @@ class Pedidos extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         Actions.refresh({ right: this._renderRightButton });
 
         AsyncStorage.getItem('username').then((token) => {
@@ -87,7 +87,7 @@ class Pedidos extends Component {
             this.state.tipoCliente != null
         ) {
             Alert.alert(this.state.tipoCliente)
-            fetch("http://213.144.154.187/rest/jsonPedido.php", {
+            fetch("http://213.144.154.201/rest/jsonPedido.php", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',

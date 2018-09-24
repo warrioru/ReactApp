@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
     ActivityIndicator, AppRegistry,
-    AsyncStorage,
+    AsyncStorage, StyleSheet,
 } from 'react-native';
 import {Router, Scene} from 'react-native-router-flux';
 
@@ -9,8 +9,14 @@ import Authentication from './routes/Authentication';
 import HomePage from './routes/HomePage';
 import Pedidos from './routes/Pedidos';
 import Entregas from './routes/Entregas';
+import Bitacora from './routes/Bitacora'
 import { YellowBox } from 'react-native';
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings([
+    'Warning: isMounted(...) is deprecated',
+    'Module RCTImageLoader',
+    'Warning: componentWillMount is deprecated',
+    'Warning: componentWillReceiveProps is deprecated'
+]);
 
 class App extends Component {
 
@@ -47,12 +53,12 @@ class App extends Component {
             )
         } else {
             return(
-                <Router>
+                <Router titleStyle={ styles.title }>
                     <Scene key="root">
                         <Scene
                             component={Authentication}
                             hideNavBar={true}
-                            initial={!this.state.hasToken}
+                            initial={this.state.hasToken}
                             key="Authentication"
                             title="Authentication"
                         />
@@ -72,9 +78,17 @@ class App extends Component {
                         <Scene
                             component={Entregas}
                             hideNavBar={false}
-                            initial={this.state.hasToken}
                             key="Entregas"
                             title="Entregas"
+                            titleStyle={styles.title}
+                        />
+                        <Scene
+                            component={Bitacora}
+                            hideNavBar={false}
+                            initial={!this.state.hasToken}
+                            key="Bitacora"
+                            title="Bitacora"
+                            titleStyle={styles.title}
                         />
                     </Scene>
                 </Router>
@@ -82,6 +96,24 @@ class App extends Component {
         }
     }
 }
+
+const styles = StyleSheet.create({
+    ViewText: {
+        color: 'white',
+        fontSize: 18,
+        fontFamily: 'DINMed',
+        flex: 1
+    },
+    alignRight: {
+        textAlign: 'right',
+        paddingRight: 4
+    },
+    title: {
+        fontSize: 22,
+        fontFamily: 'cinnamonCake'
+    }
+
+})
 
 export default App;
 

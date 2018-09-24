@@ -5,7 +5,9 @@ import {
     StyleSheet,
     View,
     Text,
-    TouchableOpacity, Alert
+    TouchableOpacity,
+    Alert,
+    ScrollView
 } from 'react-native'
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -25,7 +27,7 @@ export default class ModalInfo extends Component {
 
     updateEstado = (id, key) => {
 
-        fetch("http://213.144.154.187/rest/updateEstado.php", {
+        fetch("http://213.144.154.201/rest/updateEstado.php", {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
@@ -62,13 +64,16 @@ export default class ModalInfo extends Component {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.ModalBody}>
+
                     <Text style={styles.TextTitle}>Entrega - {this.props.entrega.nombreCliente}</Text>
-                    <Text style={styles.TextItem}><Text style={styles.BoldText}>Numero de Factura: </Text>{this.props.entrega.numFactura}</Text>
-                    <Text style={styles.TextItem}><Text style={styles.BoldText}>Fecha de entrega: </Text>{this.props.entrega.fechaEntrega}</Text>
-                    <Text style={styles.TextItem}><Text style={styles.BoldText}>Direccion: </Text>{this.props.entrega.direccion}</Text>
-                    <Text style={styles.TextItem}><Text style={styles.BoldText}>Estado Actual: </Text>{this.props.entrega.estado}</Text>
-                    <Text style={styles.TextItem}><Text style={styles.BoldText}>Nombre Vendedor: </Text>{this.props.entrega.nombreVendedor}</Text>
-                    <Text style={styles.TextItem}><Text style={styles.BoldText}>Observaciones: </Text>{this.props.entrega.observaciones}</Text>
+                    <ScrollView>
+                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Numero de Factura: </Text>{this.props.entrega.numFactura}</Text>
+                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Fecha de entrega: </Text>{this.props.entrega.fechaEntrega}</Text>
+                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Direccion: </Text>{this.props.entrega.direccion}</Text>
+                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Estado Actual: </Text>{this.props.entrega.estado}</Text>
+                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Nombre Vendedor: </Text>{this.props.entrega.nombreVendedor}</Text>
+                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Observaciones: </Text>{this.props.entrega.observaciones}</Text>
+                    </ScrollView>
 
                 </View>
 
@@ -156,7 +161,9 @@ const styles = StyleSheet.create({
     },
     ModalBody: {
         paddingLeft: 11,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginBottom: 180,
+        flexGrow: 1
     },
     BoldText: {
         fontWeight: 'bold'
@@ -164,11 +171,15 @@ const styles = StyleSheet.create({
     TextTitle: {
         textAlign: 'center',
         fontSize: 28,
+        fontFamily: 'cinnamonCake',
         paddingBottom: 15
     },
     TextItem: {
         fontSize: 18,
-        fontFamily: 'cinnamonCake'
+        fontFamily: 'DINReg',
+        lineHeight: 30,
+        paddingBottom: 10,
+        flex: 1
     }
 
 })

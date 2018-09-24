@@ -31,7 +31,7 @@ export default class EntregasCard extends Component {
                     <Text style={styles.ViewText}>{this.props.entrega.nombreVendedor}</Text>
                     <View style={styles.flexRow}>
                         <Text style={[styles.ViewText, styles.flex2 ]}>{this.props.entrega.fechaEntrega}</Text>
-                        <Text style={[styles.ViewText, styles.alignRight]}>{this.props.estado}</Text>
+                        <Text style={[styles.ViewText, styles.alignCenter, styles.border]}>{this.props.estado}</Text>
                     </View>
 
                 </View>
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     ViewText: {
         color: 'white',
         fontSize: 18,
+        fontFamily: 'DINMed',
         flex: 1
     },
     alignRight: {
@@ -68,6 +69,22 @@ const styles = StyleSheet.create({
     },
     flex2: {
         flex: 2
+    },
+    border: {
+        borderLeftWidth: 2,
+        borderRightWidth: 2,
+        borderTopWidth: 2,
+        borderBottomWidth: 1,
+        borderLeftColor: 'black',
+        backgroundColor: 'white',
+        color: 'black',
+        marginRight: 4,
+        marginLeft: 8,
+        marginBottom: 4,
+        fontSize: 16
+    },
+    alignCenter: {
+        textAlign: 'center'
     }
 
 })

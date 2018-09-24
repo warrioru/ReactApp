@@ -52,6 +52,10 @@ class HomePage extends Component {
         Actions.Entregas();
     }
 
+    bitacora() {
+        Actions.Bitacora()
+    }
+
 
     render() {
         const data = [1, 2, 3, 4, 5];
@@ -82,6 +86,7 @@ class HomePage extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.box, styles.boxL]}
+                            onPress={this.bitacora}
                         >
                             <Text style={styles.groupText} >
                                 Bitacora

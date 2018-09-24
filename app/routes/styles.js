@@ -289,5 +289,13 @@ export default styles = StyleSheet.create({
     ViewInsideModal: {
         width: 300,
         height: 300
+    },
+    textoCompleto: {
+        marginTop: 15,
+        marginLeft: 5,
+        fontSize: 22,
+        fontWeight: 'bold',
+        fontFamily: 'cinnamonCake',
+        color: 'black'
     }
 });
