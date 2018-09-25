@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
+import store from 'react-native-simple-store'
 import {
-    AsyncStorage,
     Alert,
     Image,
     Text,
@@ -16,8 +16,7 @@ import styles from './styles';
 class HomePage extends Component {
 
     getProtectedQuote() {
-        AsyncStorage.getItem('id_token').then((token) => {
-
+        store.get('id_token').then((token) => {
             fetch("http://213.144.154.94:3001/api/protected/random-quote", {
                 method: "GET",
                 headers: {
@@ -32,11 +31,11 @@ class HomePage extends Component {
                 .done();
             //"react-native": "0.55.4",
         })
-    }
+        }
 
     async userLogout() {
         try {
-            await AsyncStorage.removeItem('id_token');
+            //await AsyncStorage.removeItem('id_token');
             Alert.alert("Logout Success!");
             Actions.Authentication();
         } catch (error) {

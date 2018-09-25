@@ -1,7 +1,7 @@
 import renderIf from '../renderif';
 import React, {Component} from 'react';
+import store from 'react-native-simple-store'
 import {
-    AsyncStorage,
     Alert,
     Image,
     Text,
@@ -65,9 +65,9 @@ class Pedidos extends Component {
     componentDidMount() {
         Actions.refresh({ right: this._renderRightButton });
 
-        AsyncStorage.getItem('username').then((token) => {
-            this.setState({nombreVendedor: token});
-        });
+        store.get('username').then((token) => {
+            this.setState({nombreVendedor: token})
+        })
     }
 
     _renderRightButton = () => {
@@ -126,7 +126,7 @@ class Pedidos extends Component {
 
     async userLogout() {
         try {
-            await AsyncStorage.removeItem('id_token');
+            //await AsyncStorage.removeItem('id_token');
             Alert.alert("Logout Success!");
             Actions.Authentication();
         } catch (error) {

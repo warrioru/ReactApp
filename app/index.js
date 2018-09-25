@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
+import store from 'react-native-simple-store'
 import {
-    ActivityIndicator, AppRegistry,
-    AsyncStorage, StyleSheet,
+    ActivityIndicator,
+    AppRegistry,
+    StyleSheet
 } from 'react-native';
 import {Router, Scene} from 'react-native-router-flux';
 
@@ -31,7 +33,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        AsyncStorage.getItem('id_token').then((token) => {
+        store.get('id_token').then((token) => {
             if (token !== null){
                 this.setState({
                     hasToken: true,
@@ -43,7 +45,7 @@ class App extends Component {
                     isLoaded: true
                 });
             }
-        });
+        })
     }
 
     render() {
@@ -58,7 +60,7 @@ class App extends Component {
                         <Scene
                             component={Authentication}
                             hideNavBar={true}
-                            initial={this.state.hasToken}
+                            initial={!this.state.hasToken}
                             key="Authentication"
                             title="Authentication"
                         />
@@ -85,7 +87,6 @@ class App extends Component {
                         <Scene
                             component={Bitacora}
                             hideNavBar={false}
-                            initial={!this.state.hasToken}
                             key="Bitacora"
                             title="Bitacora"
                             titleStyle={styles.title}

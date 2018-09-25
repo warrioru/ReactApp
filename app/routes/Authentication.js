@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
+import store from 'react-native-simple-store'
 import {
-    AsyncStorage,
     Alert,
     Text,
     TextInput,
@@ -44,8 +44,10 @@ class Authentication extends Component {
 
     async onValueChange(item, selectedValue) {
         try {
-            await AsyncStorage.setItem(item, selectedValue);
-            await AsyncStorage.setItem('username', this.state.username);
+            await store.update(item, selectedValue)
+            await store.update('username', this.state.username)
+            //await AsyncStorage.setItem(item, selectedValue);
+            //await AsyncStorage.setItem('username', this.state.username);
         } catch (error) {
             console.log('AsyncStorage error: ' + error.message);
         }
