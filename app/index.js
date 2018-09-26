@@ -17,7 +17,8 @@ YellowBox.ignoreWarnings([
     'Warning: isMounted(...) is deprecated',
     'Module RCTImageLoader',
     'Warning: componentWillMount is deprecated',
-    'Warning: componentWillReceiveProps is deprecated'
+    'Warning: componentWillReceiveProps is deprecated',
+    'Warning: componentWillUpdate is deprecated'
 ]);
 
 class App extends Component {
@@ -67,7 +68,7 @@ class App extends Component {
                         <Scene
                             component={HomePage}
                             hideNavBar={true}
-
+                            initial={this.state.hasToken}
                             key="HomePage"
                             title="Home Page"
                         />

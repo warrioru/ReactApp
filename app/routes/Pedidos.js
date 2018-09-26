@@ -12,8 +12,8 @@ import {
     StyleSheet,
     TextInput,
     ScrollView,
-    Picker,
-    Switch
+    Switch,
+    Picker
 } from 'react-native';
 
 const mark = require("../images/login/logo.jpg");
@@ -26,7 +26,8 @@ import DatePicker from 'react-native-datepicker';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Prompt from 'react-native-prompt';
+import Prompt from 'react-native-input-prompt';
+import { Dropdown } from 'react-native-material-dropdown';
 
 
 //import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -38,6 +39,7 @@ class Pedidos extends Component {
 
     constructor(){
         super();
+
         this.state = {
             nombreCliente: null,
             rucCliente: null,
@@ -186,6 +188,8 @@ class Pedidos extends Component {
             alert(JSON.stringify(this.state.readyItems))
         } else {
             this.setState({ promptVisible: true })
+            this.state.promptVisible = true
+            console.log(this.state.promptVisible)
         }
     }
 
@@ -271,6 +275,22 @@ class Pedidos extends Component {
                 }]
             },
         ];
+
+        const dataInstitucion = [
+            {value: 'HORECA'},
+            {value: 'Relacionadas'},
+            {value: 'Institucionales'}
+        ]
+        const dataPago = [
+            {value: 'Contado'},
+            {value: 'Plazos Dias'}
+        ]
+        const dataDias = [
+            {value: '15 dias'},
+            {value: '30 dias'},
+            {value: '45 dias'},
+            {value: '60 dias'}
+        ]
 
         return (
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always' keyboardDismissMode='on-drag'>
@@ -362,18 +382,18 @@ class Pedidos extends Component {
                         <View style={styles.iconWrap}>
                             <FontAwesome name="shopping-cart" size={25} color="#900" />
                         </View>
-                        <Picker
-                            selectedValue={this.state.tipoCliente}
-                            style={{ width: '100%' }}
-                            onValueChange={(itemValue, itemIndex) => {
+                        <Dropdown
+                            label='Institucion'
+                            data={dataInstitucion}
+                            containerStyle={styles.dropdown1}
+                            inputContainerStyle={{ borderBottomColor: 'transparent' }}
+                            onChangeText={(itemValue) => {
                                 this.setState({tipoCliente: itemValue})
                                 this.state.tipoCliente = itemValue
                                 console.log(this.state.tipoCliente)
-                            }}>
-                            <Picker.Item label="HORECA" value="horeca" />
-                            <Picker.Item label="Relacionadas" value="relacionadas" />
-                            <Picker.Item label="Institucionales" value="institucionales" />
-                        </Picker>
+                            }}
+                        />
+
                     </View>
 
                     <View style = {styles.inputWrap}>
@@ -382,13 +402,13 @@ class Pedidos extends Component {
                                          style={{marginBottom:15}}
                             />
                         </View>
-                        <Text style={{fontSize: 18}}> En consignacion? </Text>
+                        <Text style={{fontSize: 18, flex: 1}}> En consignacion? </Text>
                         <Switch
                             onValueChange = {(itemValue) => {
                                 this.setState({consignacion: itemValue});
                             }}
                             value = {this.state.consignacion}
-                            style={{marginBottom:15}}
+                            style={{marginTop:-5, marginRight: 15}}
                         />
                     </View>
 
@@ -470,43 +490,42 @@ class Pedidos extends Component {
                         <View style={styles.iconWrap}>
                             <FontAwesome name="shopping-cart" size={25} color="#900" />
                         </View>
-                        <Picker
-                            selectedValue={this.state.formaPago}
-                            style={{ width: '100%' }}
-                            onValueChange={(itemValue, itemIndex) => {
+                        <Dropdown
+                            label='Forma de pago'
+                            data={dataPago}
+                            containerStyle={styles.dropdown1}
+                            inputContainerStyle={{ borderBottomColor: 'transparent' }}
+                            onChangeText={(itemValue) => {
                                 this.setState({formaPago: itemValue});
-                                if (itemValue == "plazo") {
-                                    Alert.alert("Elegir los dias plazo abajo")
+                                if (itemValue == "Plazos Dias") {
                                     this.setState({showTheThing: true})
                                 } else {
                                     this.setState({showTheThing: false})
                                     this.setState({plazoDias: null})
                                 }
-                            }}>
-                            <Picker.Item label="Contado" value="contado" />
-                            <Picker.Item label="Dias Plazo" value="plazo" />
-                        </Picker>
+                            }}
+                        />
+
                     </View>
 
                     { renderIf(this.state.showTheThing)(
-                        <View style={styles.inputWrap}>
-                            <View style={styles.iconWrap}>
-                                <FontAwesome name="sun-o" size={25} color="#900" />
-                            </View>
-                            <Picker
-                                selectedValue={this.state.plazoDias}
-                                style={{ width: '100%' }}
-                                onValueChange={(itemValue, itemIndex) => {
-                                    this.setState({plazoDias: itemValue});
-                                    this.state.plazoDias = itemValue
-                                } }
-                            >
-                                <Picker.Item label="15 dias" value="15" />
-                                <Picker.Item label="30 dias" value="30" />
-                                <Picker.Item label="45 dias" value="45" />
-                                <Picker.Item label="60 dias" value="60" />
-                            </Picker>
+                    <View style={[styles.inputWrap, styles.paddingBottom]}>
+                        <View style={styles.iconWrap}>
+                            <FontAwesome name="sun-o" size={25} color="#900" />
                         </View>
+                        <Dropdown
+                            label='Numero de dias'
+                            data={dataDias}
+                            containerStyle={styles.dropdown1}
+                            inputContainerStyle={{ borderBottomColor: 'transparent' }}
+                            dropdownPosition={3}
+                            onChangeText={(itemValue) => {
+                                this.setState({plazoDias: itemValue});
+                                this.state.plazoDias = itemValue
+                            }}
+                        />
+
+                    </View>
                     )}
 
                 </View>
@@ -526,6 +545,7 @@ class Pedidos extends Component {
                     placeholder="Cantidad"
                     visible={this.state.promptVisible}
                     onCancel={() => this.setState({ promptVisible: false })}
+                    cancelButtonStyle={{opacity: 0}}
                     onSubmit={this.handlePromptInput}/>
             </View>
             </ScrollView>

@@ -54,11 +54,25 @@ export default class ModalInfo extends Component {
     }
 
     render(){
+        var colorUsar = ''
+        var estado = this.props.entrega.estado
+        switch(estado) {
+            case '0':
+                colorUsar = 'rgba(255,0,0,0.65)'
+                break
+            case '1':
+                colorUsar = 'rgba(241,192,56,0.65)'
+                break
+            case '2':
+                colorUsar = 'rgba(20,204,48,0.65)'
+                break
+        }
         return (
-            <View style={styles.ModalInfo}>
+            <View style={[styles.ModalInfo, {backgroundColor: colorUsar}]}>
                 <View style={styles.ModalHeader}>
                     <TouchableOpacity
                         onPress={this.onClickHide}
+                        style={{marginTop: 10}}
                     >
                         <FontAwesome name="close" size={38} color="#808080" />
                     </TouchableOpacity>
@@ -176,7 +190,7 @@ const styles = StyleSheet.create({
     },
     TextItem: {
         fontSize: 18,
-        fontFamily: 'DINReg',
+        fontFamily: 'Arial',
         lineHeight: 30,
         paddingBottom: 10,
         flex: 1

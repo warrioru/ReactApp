@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     ViewText: {
         color: 'white',
         fontSize: 18,
-        fontFamily: 'DINMed',
+        fontFamily: 'Arial',
         flex: 1
     },
     alignRight: {

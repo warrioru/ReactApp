@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ReactNativeAuth.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>armv7</string>
+				<string>arm64</string>
+			</array>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>4C333207B820E32EAF25A95F8E64F16A19396186</string>
+				<key>dateExpires</key>
+				<string>23.07.19</string>
+				<key>type</key>
+				<string>iOS Development</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>BM7XEM3TEV.com.example.ReactNativeAuth</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>BM7XEM3TEV</string>
+				<key>get-task-allow</key>
+				<true/>
+				<key>keychain-access-groups</key>
+				<array>
+					<string>BM7XEM3TEV.com.example.ReactNativeAuth</string>
+				</array>
+			</dict>
+			<key>name</key>
+			<string>ReactNativeAuth.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>277a2cf0-a39f-4cc5-98a7-53ab4745cb5f</string>
+				<key>name</key>
+				<string>iOS Team Provisioning Profile: com.example.ReactNativeAuth</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>BM7XEM3TEV</string>
+				<key>name</key>
+				<string>JLS Digital AG</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
