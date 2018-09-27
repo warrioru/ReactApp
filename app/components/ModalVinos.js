@@ -7,22 +7,125 @@ import {
     Text,
     TouchableOpacity,
     Alert,
-    ScrollView
+    ScrollView, Animated,
+    Image
 } from 'react-native'
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Actions} from "react-native-router-flux";
+import VinosCard from '../components/VinosCard'
 
 export default class ModalVinos extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            ViewArray: [],
+            Disable_Button: false,
+            vinos: []
+        }
 
-        }
-        }
+        this.animatedValue = new Animated.Value(0);
+        this.Array_Value_Index = 0;
+
+        this.getVinosRest()
+    }
+
+    getVinosRest() {
+        fetch("http://localhost:8888/rest/jsonVinos.php", {
+            method: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => response.json())
+            .then((responseData) => {
+                responseData.map((entregaData) => {
+                    this.state.vinos.push(entregaData);
+
+                    //create the view with pedido
+                    this.Add_New_View_Function(entregaData);
+                });
+
+            })
+            .done();
+    }
+
+    onClickHide = () => {
+        this.props.callback(false)
+        this.props.callback2(this.state.vinos)
+    }
+
+    Add_New_View_Function = (items) => {
+        this.animatedValue.setValue(0);
+
+        let New_Added_View_Value = {Array_Value_Index: this.Array_Value_Index}
+
+        const params = [this.Array_Value_Index, items]
+
+        this.setState({ViewArray: [...this.state.ViewArray, params]}, () => {
+            Animated.timing(
+                this.animatedValue,
+                {
+                    toValue: 1,
+                    duration: 400,
+                    useNativeDriver: true
+                }
+            ).start(() => {
+                this.Array_Value_Index = this.Array_Value_Index + 1;
+
+                this.setState({Disable_Button: false});
+            });
+        });
+
+    }
+
+    updateQuantity = (index, cantidad) => {
+        this.state.vinos[index].cantidad = cantidad
     }
 
     render() {
+
+        const AnimationValue = this.animatedValue.interpolate(
+            {
+                inputRange: [ 0, 1 ],
+
+                outputRange: [ -59, 0 ]
+            });
+
+        let Render_Animated_View = this.state.ViewArray.map(( array, index ) =>
+        {
+            var item = array[0]
+            var vino = array[1]
+
+
+            if (vino != null) {
+                var background = '#FF0000';
+                var estadoActual = 'En Espera';
+
+                return(
+
+                    <Animated.View
+                        key = { item }
+                        style = {[ styles.Animated_View_Style, {backgroundColor: background}, { opacity: this.animatedValue, transform: [{ translateY: AnimationValue }] }]}>
+
+                        <View style={styles.extraContainer}>
+                            <VinosCard
+                                vino={ vino }
+                                index={index}
+                                callback={this.updateQuantity}
+                            />
+                        </View>
+
+
+                    </Animated.View>
+
+
+                );
+            }
+
+        });
+
 
         return (
             <View style={styles.ModalInfo}>
@@ -30,26 +133,29 @@ export default class ModalVinos extends Component {
                     <TouchableOpacity
                         onPress={this.onClickHide}
                     >
-                        <FontAwesome name="close" size={38} color="#808080" />
+                        <FontAwesome name="close" size={38} color="#808080"/>
                     </TouchableOpacity>
                 </View>
+
                 <View style={styles.ModalBody}>
 
-                    <Text style={styles.TextTitle}>Entrega - {this.props.entrega.nombreCliente}</Text>
+                    <Text style={styles.TextTitle}>Lista de Vinos </Text>
                     <ScrollView>
-                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Numero de Factura: </Text>{this.props.entrega.numFactura}</Text>
-                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Fecha de entrega: </Text>{this.props.entrega.fechaEntrega}</Text>
-                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Direccion: </Text>{this.props.entrega.direccion}</Text>
-                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Estado Actual: </Text>{this.props.entrega.estado}</Text>
-                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Nombre Vendedor: </Text>{this.props.entrega.nombreVendedor}</Text>
-                        <Text style={styles.TextItem}><Text style={styles.BoldText}>Observaciones: </Text>{this.props.entrega.observaciones}</Text>
+                        <View style = {{ flex: 1, padding: 2 }}>
+                            { renderIf(this.state.loadedToday)(
+                                <Text style={styles.textoCompleto}>Entregas para hoy: </Text>
+                            )}
+                            {
+                                Render_Animated_View
+                            }
+                        </View>
                     </ScrollView>
 
                 </View>
 
 
-            </View>
 
+            </View>
 
 
         )
@@ -98,7 +204,6 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     ModalBody: {
-        paddingLeft: 11,
         justifyContent: 'space-between',
         marginBottom: 180,
         flexGrow: 1
@@ -118,6 +223,13 @@ const styles = StyleSheet.create({
         lineHeight: 30,
         paddingBottom: 10,
         flex: 1
-    }
+    },
+    Animated_View_Style:
+        {
+            height: 50,
+            alignItems: 'flex-start',
+            margin: 4,
+            borderRadius: 10
+        }
 
 })

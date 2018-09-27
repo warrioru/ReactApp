@@ -3,17 +3,14 @@ import React, {Component} from 'react';
 import store from 'react-native-simple-store'
 import {
     Alert,
-    Image,
     Text,
     TouchableOpacity,
     View,
     Keyboard,
-    ImageBackground,
-    StyleSheet,
     TextInput,
     ScrollView,
     Switch,
-    Picker
+    Modal
 } from 'react-native';
 
 const mark = require("../images/login/logo.jpg");
@@ -28,6 +25,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Prompt from 'react-native-input-prompt';
 import { Dropdown } from 'react-native-material-dropdown';
+import ModalVinos from '../components/ModalVinos'
 
 
 //import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -60,7 +58,8 @@ class Pedidos extends Component {
             promptVisible: false,
             idVino: null,
             cantidadTemp: null,
-            duplicateIds: []
+            duplicateIds: [],
+            modalVisible: false
         }
     }
 
@@ -207,7 +206,23 @@ class Pedidos extends Component {
         }
     }
 
+    setModalVisible = (visible) => {
+        this.setState({modalVisible: visible})
+        //this.setState({entregaSelected: this.state.entregas[index]})
+    }
 
+    updateVinosList = (vinos) => {
+        var filteredWines = []
+        vinos.map((vino) => {
+            if (vino.cantidad != '') {
+                filteredWines.push(vino)
+            }
+        })
+        this.setState({selectedItems: filteredWines}, () => {
+            console.log(this.state.selectedItems)
+        })
+
+    }
 
 
 
@@ -294,260 +309,292 @@ class Pedidos extends Component {
 
         return (
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always' keyboardDismissMode='on-drag'>
-            <View style={styles.container}>
-                <View style={styles.backgroundColor}>
+                <Modal
+                    animationType={'slide'}
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => {
+                        alert('Modal has been closed.');
+                    }}>
+                    <ModalVinos
+                        entrega={this.state.entregaSelected}
+                        callback={this.setModalVisible}
+                        callback2={this.updateVinosList}
+                    />
+                </Modal>
 
-                <View style={styles.wrapper}>
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <FontAwesome name="user" size={30} color="#900" />
-                        </View>
-                        <TextInput
-                            placeholderTextColor="#989898"
-                            style={styles.input}
-                            editable={true}
-                            onChangeText={(nombreCliente) => this.setState({nombreCliente})}
-                            placeholder='Nombre Cliente'
-                            ref='nombreCliente'
-                            returnKeyType='next'
-                            value={this.state.nombreCliente}
-                        />
-                    </View>
+                <View style={styles.container}>
+                    <View style={styles.backgroundColor}>
 
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <FontAwesome name="user" size={30} color="#900" />
-                        </View>
-                        <TextInput
-                            placeholderTextColor="#989898"
-                            style={styles.input}
-                            editable={true}
-                            onChangeText={(rucCliente) => this.setState({rucCliente})}
-                            placeholder='CI / RUC Cliente'
-                            ref='rucCliente'
-                            returnKeyType='next'
-                            keyboardType = 'numeric'
-                            value={this.state.rucCliente}
-                        />
-                    </View>
-
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <FontAwesome name="user" size={30} color="#900" />
-                        </View>
-                        <TextInput
-                            placeholderTextColor="#989898"
-                            style={styles.input}
-                            editable={true}
-                            onChangeText={(emailCliente) => this.setState({emailCliente})}
-                            placeholder='Email Cliente'
-                            ref='emailCliente'
-                            returnKeyType='next'
-                            value={this.state.emailCliente}
-                        />
-                    </View>
-
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <FontAwesome name="address-card" size={20} color="#900" />
-                        </View>
-                        <TextInput
-                            placeholderTextColor="#989898"
-                            placeholder="Direccion Cliente"
-                            style={styles.input}
-                            editable={true}
-                            onChangeText={(dirCliente) => this.setState({dirCliente})}
-                            ref='dirCliente'
-                            returnKeyType='next'
-                            value={this.state.dirCliente}
-                        />
-                    </View>
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <FontAwesome name="map-marker" size={30} color="#900" />
-                        </View>
-                        <TextInput
-                            placeholderTextColor="#989898"
-                            placeholder="Referencia"
-                            style={styles.input}
-                            editable={true}
-                            onChangeText={(referencia) => this.setState({referencia})}
-                            ref='referencia'
-                            returnKeyType='next'
-                            value={this.state.referencia}
-                        />
-                    </View>
-
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <FontAwesome name="shopping-cart" size={25} color="#900" />
-                        </View>
-                        <Dropdown
-                            label='Institucion'
-                            data={dataInstitucion}
-                            containerStyle={styles.dropdown1}
-                            inputContainerStyle={{ borderBottomColor: 'transparent' }}
-                            onChangeText={(itemValue) => {
-                                this.setState({tipoCliente: itemValue})
-                                this.state.tipoCliente = itemValue
-                                console.log(this.state.tipoCliente)
-                            }}
-                        />
-
-                    </View>
-
-                    <View style = {styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <FontAwesome name="shopping-cart" size={25} color="#900"
-                                         style={{marginBottom:15}}
+                    <View style={styles.wrapper}>
+                        <View style={styles.inputWrap}>
+                            <View style={styles.iconWrap}>
+                                <FontAwesome name="user" size={30} color="#900" />
+                            </View>
+                            <TextInput
+                                placeholderTextColor="#989898"
+                                style={styles.input}
+                                editable={true}
+                                onChangeText={(nombreCliente) => this.setState({nombreCliente})}
+                                placeholder='Nombre Cliente'
+                                ref='nombreCliente'
+                                returnKeyType='next'
+                                value={this.state.nombreCliente}
                             />
                         </View>
-                        <Text style={{fontSize: 18, flex: 1}}> En consignacion? </Text>
-                        <Switch
-                            onValueChange = {(itemValue) => {
-                                this.setState({consignacion: itemValue});
-                            }}
-                            value = {this.state.consignacion}
-                            style={{marginTop:-5, marginRight: 15}}
-                        />
-                    </View>
 
-
-                    <View style={styles.inputWrap3}>
-                        <View style={styles.iconWrap}>
-                            <Ionicons name='ios-wine' size={35} color='#900' />
-                        </View>
-                        <View style={styles.container}>
-                            <SectionedMultiSelect
-                                styles={{width: '100%'}}
-                                items={items}
-                                uniqueKey='id'
-                                subKey='children'
-                                selectText='Items'
-                                showDropDowns={true}
-                                readOnlyHeadings={true}
-                                onSelectedItemsChange={this.onSelectedItemsChange}
-                                selectedItems={this.state.selectedItems}
+                        <View style={styles.inputWrap}>
+                            <View style={styles.iconWrap}>
+                                <FontAwesome name="user" size={30} color="#900" />
+                            </View>
+                            <TextInput
+                                placeholderTextColor="#989898"
+                                style={styles.input}
+                                editable={true}
+                                onChangeText={(rucCliente) => this.setState({rucCliente})}
+                                placeholder='CI / RUC Cliente'
+                                ref='rucCliente'
+                                returnKeyType='next'
+                                keyboardType = 'numeric'
+                                value={this.state.rucCliente}
                             />
                         </View>
-                    </View>
 
-                    <View style={styles.inputWrap2}>
-                    <DatePicker
-                        style={{width: "95%"}}
-                        date={this.state.fechaEntrega}
-                        mode="datetime"
-                        placeholder="Fecha de Entrega"
-                        format="DD-MM-YYYY HH:mm"
-                        minDate={new Date()}
-                        confirmBtnText="Ok"
-                        cancelBtnText="Cancel"
-                        customStyles={{
-                            dateIcon: {
-                                position: 'absolute',
-                                left: 0,
-                                top: 4,
-                                marginLeft: 0
-                            },
-                            dateInput: {
-                                marginLeft: 36
-                            }
-                            // ... You can check the source to find the other keys.
-                        }}
-                        onDateChange={(fechaEntrega) => {this.setState({fechaEntrega: fechaEntrega})}}
-                    />
-                    </View>
-
-                    { renderIf(!this.state.consignacion)(
-                    <View style={styles.inputWrap2}>
-                    <DatePicker
-                        style={{width: "95%"}}
-                        date={this.state.fechaFacturacion}
-                        mode="date"
-                        placeholder="Fecha de Facturacion"
-                        format="DD-MM-YYYY"
-                        minDate={new Date()}
-                        confirmBtnText="Ok"
-                        cancelBtnText="Cancel"
-                        customStyles={{
-                            dateIcon: {
-                                position: 'absolute',
-                                left: 0,
-                                top: 4,
-                                marginLeft: 0
-                            },
-                            dateInput: {
-                                marginLeft: 36
-                            }
-                            // ... You can check the source to find the other keys.
-                        }}
-                        onDateChange={(fechaFacturacion) => {this.setState({fechaFacturacion: fechaFacturacion})}}
-                    />
-                    </View>
-                    )}
-
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <FontAwesome name="shopping-cart" size={25} color="#900" />
+                        <View style={styles.inputWrap}>
+                            <View style={styles.iconWrap}>
+                                <FontAwesome name="user" size={30} color="#900" />
+                            </View>
+                            <TextInput
+                                placeholderTextColor="#989898"
+                                style={styles.input}
+                                editable={true}
+                                onChangeText={(emailCliente) => this.setState({emailCliente})}
+                                placeholder='Email Cliente'
+                                ref='emailCliente'
+                                returnKeyType='next'
+                                value={this.state.emailCliente}
+                            />
                         </View>
-                        <Dropdown
-                            label='Forma de pago'
-                            data={dataPago}
-                            containerStyle={styles.dropdown1}
-                            inputContainerStyle={{ borderBottomColor: 'transparent' }}
-                            onChangeText={(itemValue) => {
-                                this.setState({formaPago: itemValue});
-                                if (itemValue == "Plazos Dias") {
-                                    this.setState({showTheThing: true})
-                                } else {
-                                    this.setState({showTheThing: false})
-                                    this.setState({plazoDias: null})
+
+                        <View style={styles.inputWrap}>
+                            <View style={styles.iconWrap}>
+                                <FontAwesome name="address-card" size={20} color="#900" />
+                            </View>
+                            <TextInput
+                                placeholderTextColor="#989898"
+                                placeholder="Direccion Cliente"
+                                style={styles.input}
+                                editable={true}
+                                onChangeText={(dirCliente) => this.setState({dirCliente})}
+                                ref='dirCliente'
+                                returnKeyType='next'
+                                value={this.state.dirCliente}
+                            />
+                        </View>
+                        <View style={styles.inputWrap}>
+                            <View style={styles.iconWrap}>
+                                <FontAwesome name="map-marker" size={30} color="#900" />
+                            </View>
+                            <TextInput
+                                placeholderTextColor="#989898"
+                                placeholder="Referencia"
+                                style={styles.input}
+                                editable={true}
+                                onChangeText={(referencia) => this.setState({referencia})}
+                                ref='referencia'
+                                returnKeyType='next'
+                                value={this.state.referencia}
+                            />
+                        </View>
+
+                        <View style={styles.inputWrap}>
+                            <View style={styles.iconWrap}>
+                                <FontAwesome name="shopping-cart" size={25} color="#900" />
+                            </View>
+                            <Dropdown
+                                label='Institucion'
+                                data={dataInstitucion}
+                                containerStyle={styles.dropdown1}
+                                inputContainerStyle={{ borderBottomColor: 'transparent' }}
+                                onChangeText={(itemValue) => {
+                                    this.setState({tipoCliente: itemValue})
+                                    this.state.tipoCliente = itemValue
+                                    console.log(this.state.tipoCliente)
+                                }}
+                            />
+
+                        </View>
+
+                        <View style = {styles.inputWrap}>
+                            <View style={styles.iconWrap}>
+                                <FontAwesome name="shopping-cart" size={25} color="#900"
+                                             style={{marginBottom:15}}
+                                />
+                            </View>
+                            <Text style={{fontSize: 18, flex: 1}}> En consignacion? </Text>
+                            <Switch
+                                onValueChange = {(itemValue) => {
+                                    this.setState({consignacion: itemValue});
+                                }}
+                                value = {this.state.consignacion}
+                                style={{marginTop:-5, marginRight: 15}}
+                            />
+                        </View>
+
+                        <View style={styles.inputWrap3}>
+                            <View style={styles.iconWrap}>
+                                <Ionicons name='ios-wine' size={35} color='#900' />
+                            </View>
+                            <View style={styles.container}>
+                                <TouchableOpacity
+                                    activeOpacity = { 0.7 }
+                                    style = { styles.TouchableOpacityStyle }
+                                    onPress={() => {
+                                        this.setState({modalVisible: true})
+                                        this.state.modalVisible = true
+                                    }}
+                                >
+                                    <Text>Lista de Vinos</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+
+                        <View style={styles.inputWrap3}>
+                            <View style={styles.iconWrap}>
+                                <Ionicons name='ios-wine' size={35} color='#900' />
+                            </View>
+                            <View style={styles.container}>
+                                <SectionedMultiSelect
+                                    styles={{width: '100%'}}
+                                    items={items}
+                                    uniqueKey='id'
+                                    subKey='children'
+                                    selectText='Items'
+                                    showDropDowns={true}
+                                    readOnlyHeadings={true}
+                                    onSelectedItemsChange={this.onSelectedItemsChange}
+                                    selectedItems={this.state.selectedItems}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={styles.inputWrap2}>
+                        <DatePicker
+                            style={{width: "95%"}}
+                            date={this.state.fechaEntrega}
+                            mode="datetime"
+                            placeholder="Fecha de Entrega"
+                            format="DD-MM-YYYY HH:mm"
+                            minDate={new Date()}
+                            confirmBtnText="Ok"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                                dateIcon: {
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 4,
+                                    marginLeft: 0
+                                },
+                                dateInput: {
+                                    marginLeft: 36
                                 }
+                                // ... You can check the source to find the other keys.
                             }}
+                            onDateChange={(fechaEntrega) => {this.setState({fechaEntrega: fechaEntrega})}}
                         />
-
-                    </View>
-
-                    { renderIf(this.state.showTheThing)(
-                    <View style={[styles.inputWrap, styles.paddingBottom]}>
-                        <View style={styles.iconWrap}>
-                            <FontAwesome name="sun-o" size={25} color="#900" />
                         </View>
-                        <Dropdown
-                            label='Numero de dias'
-                            data={dataDias}
-                            containerStyle={styles.dropdown1}
-                            inputContainerStyle={{ borderBottomColor: 'transparent' }}
-                            dropdownPosition={3}
-                            onChangeText={(itemValue) => {
-                                this.setState({plazoDias: itemValue});
-                                this.state.plazoDias = itemValue
+
+                        { renderIf(!this.state.consignacion)(
+                        <View style={styles.inputWrap2}>
+                        <DatePicker
+                            style={{width: "95%"}}
+                            date={this.state.fechaFacturacion}
+                            mode="date"
+                            placeholder="Fecha de Facturacion"
+                            format="DD-MM-YYYY"
+                            minDate={new Date()}
+                            confirmBtnText="Ok"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                                dateIcon: {
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 4,
+                                    marginLeft: 0
+                                },
+                                dateInput: {
+                                    marginLeft: 36
+                                }
+                                // ... You can check the source to find the other keys.
                             }}
+                            onDateChange={(fechaFacturacion) => {this.setState({fechaFacturacion: fechaFacturacion})}}
                         />
+                        </View>
+                        )}
+
+                        <View style={styles.inputWrap}>
+                            <View style={styles.iconWrap}>
+                                <FontAwesome name="shopping-cart" size={25} color="#900" />
+                            </View>
+                            <Dropdown
+                                label='Forma de pago'
+                                data={dataPago}
+                                containerStyle={styles.dropdown1}
+                                inputContainerStyle={{ borderBottomColor: 'transparent' }}
+                                onChangeText={(itemValue) => {
+                                    this.setState({formaPago: itemValue});
+                                    if (itemValue == "Plazos Dias") {
+                                        this.setState({showTheThing: true})
+                                    } else {
+                                        this.setState({showTheThing: false})
+                                        this.setState({plazoDias: null})
+                                    }
+                                }}
+                            />
+
+                        </View>
+
+                        { renderIf(this.state.showTheThing)(
+                        <View style={[styles.inputWrap, styles.paddingBottom]}>
+                            <View style={styles.iconWrap}>
+                                <FontAwesome name="sun-o" size={25} color="#900" />
+                            </View>
+                            <Dropdown
+                                label='Numero de dias'
+                                data={dataDias}
+                                containerStyle={styles.dropdown1}
+                                inputContainerStyle={{ borderBottomColor: 'transparent' }}
+                                dropdownPosition={3}
+                                onChangeText={(itemValue) => {
+                                    this.setState({plazoDias: itemValue});
+                                    this.state.plazoDias = itemValue
+                                }}
+                            />
+
+                        </View>
+                        )}
 
                     </View>
-                    )}
+                    </View>
 
+
+                    {/*<TouchableOpacity
+                        style={styles.button}
+                        onPress={this.userLogout}
+                    >
+                        <Text style={styles.buttonText} >
+                            Log out
+                        </Text>
+                    </TouchableOpacity>*/}
+                    <Prompt
+                        title="Cantidad"
+                        placeholder="Cantidad"
+                        visible={this.state.promptVisible}
+                        onCancel={() => this.setState({ promptVisible: false })}
+                        cancelButtonStyle={{opacity: 0}}
+                        onSubmit={this.handlePromptInput}/>
                 </View>
-                </View>
-
-
-                {/*<TouchableOpacity
-                    style={styles.button}
-                    onPress={this.userLogout}
-                >
-                    <Text style={styles.buttonText} >
-                        Log out
-                    </Text>
-                </TouchableOpacity>*/}
-                <Prompt
-                    title="Cantidad"
-                    placeholder="Cantidad"
-                    visible={this.state.promptVisible}
-                    onCancel={() => this.setState({ promptVisible: false })}
-                    cancelButtonStyle={{opacity: 0}}
-                    onSubmit={this.handlePromptInput}/>
-            </View>
             </ScrollView>
 
 
