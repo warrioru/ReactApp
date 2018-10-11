@@ -449,34 +449,14 @@ class Pedidos extends Component {
                             <View style={styles.container}>
                                 <TouchableOpacity
                                     activeOpacity = { 0.7 }
-                                    style = { styles.TouchableOpacityStyle }
+                                    style = { styles.TouchableContainer1 }
                                     onPress={() => {
                                         this.setState({modalVisible: true})
                                         this.state.modalVisible = true
                                     }}
                                 >
-                                    <Text>Lista de Vinos</Text>
+                                    <Text style={styles.ListaTextStyle}>Lista de Vinos</Text>
                                 </TouchableOpacity>
-                            </View>
-                        </View>
-
-
-                        <View style={styles.inputWrap3}>
-                            <View style={styles.iconWrap}>
-                                <Ionicons name='ios-wine' size={35} color='#900' />
-                            </View>
-                            <View style={styles.container}>
-                                <SectionedMultiSelect
-                                    styles={{width: '100%'}}
-                                    items={items}
-                                    uniqueKey='id'
-                                    subKey='children'
-                                    selectText='Items'
-                                    showDropDowns={true}
-                                    readOnlyHeadings={true}
-                                    onSelectedItemsChange={this.onSelectedItemsChange}
-                                    selectedItems={this.state.selectedItems}
-                                />
                             </View>
                         </View>
 

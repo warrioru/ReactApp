@@ -273,6 +273,16 @@ export default styles = StyleSheet.create({
 	TouchableContainer: {
 		flexDirection: 'row',
 	},
+    TouchableContainer1: {
+        flexDirection: 'row',
+		paddingTop: 8,
+		paddingTop: 8,
+		paddingLeft: 10
+    },
+	ListaTextStyle: {
+		fontSize: 20,
+		fontFamily: 'cinnamonCake'
+	},
 	extraContainer: {
 		flex: 1,
 		flexDirection: 'row',

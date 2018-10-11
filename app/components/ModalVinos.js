@@ -261,10 +261,16 @@ const styles = StyleSheet.create({
     },
     Animated_View_Style:
         {
-            height: 50,
+            height: 100,
             alignItems: 'flex-start',
             margin: 4,
             borderRadius: 10
-        }
+        },
+    extraContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'stretch',
+        justifyContent: 'flex-end'
+    },
 
 })

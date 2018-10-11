@@ -82,13 +82,14 @@ const styles = StyleSheet.create({
     EntregasCard: {
         flex: 1,
         width: '100%',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     ViewText: {
         color: 'white',
         fontSize: 18,
-        fontFamily: 'Arial',
-        flex: 1
+        fontFamily: 'Arial'
     },
     alignRight: {
         textAlign: 'right',
