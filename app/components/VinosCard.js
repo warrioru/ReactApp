@@ -1,10 +1,12 @@
+import renderIf from '../renderif';
 import React, { Component } from 'react'
 
 import {
     StyleSheet,
     View,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native'
 
 import Prompt from 'react-native-input-prompt';
@@ -14,12 +16,24 @@ export default class VinosCard extends Component {
         super(props)
         this.state = {
             promptVisible: false,
-
+            alertVisible: false
         }
     }
 
     onClickVino = () => {
-        this.setState({promptVisible: true})
+        if (this.props.vino.cantidad == undefined) {
+            this.setState({promptVisible: true})
+        } else {
+            Alert.alert(
+                this.props.vino.nombre,
+                'Eliminar o modificar cantidad del vino',
+                [
+                    {text: 'Eliminar', onPress: () => this.props.callback(this.props.index, undefined), style: 'cancel'},
+                    {text: 'Modificar', onPress: () => this.setState({promptVisible: true})},
+                ],
+                { cancelable: false })
+        }
+
     }
 
     handlePromptInput = (cantidad) => {
@@ -39,6 +53,9 @@ export default class VinosCard extends Component {
                     <Text style={styles.ViewText}>{this.props.vino.bodega}</Text>
 
                 </View>
+                <View style={styles.EntregasCard}>
+                    <Text style={styles.ViewText} >{'Cantidad elegida: ' + this.props.vino.cantidad }</Text>
+                </View>
 
                 <Prompt
                     title={this.props.vino.nombre}
@@ -56,6 +73,7 @@ export default class VinosCard extends Component {
 const styles = StyleSheet.create({
     TouchContainer: {
         flex: 1,
+        flexDirection: 'column',
         width: '100%',
         paddingLeft: 8,
         paddingTop: 10,

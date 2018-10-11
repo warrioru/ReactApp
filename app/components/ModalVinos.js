@@ -21,13 +21,31 @@ export default class ModalVinos extends Component {
         this.state = {
             ViewArray: [],
             Disable_Button: false,
-            vinos: []
+            vinos: [],
+            isMounted: false
         }
 
         this.animatedValue = new Animated.Value(0);
         this.Array_Value_Index = 0;
 
-        this.getVinosRest()
+        if(this.props.vinos.length == 0) {
+            this.getVinosRest()
+        } else {
+            //t/his.getVinosNotRest()
+        }
+
+    }
+
+    async componentDidMount() {
+        this.setState({ isMounted: true}, () => {
+            if (this.state.isMounted) {
+                this.setState({ isMounted: false })
+                if (this.props.vinos.length > 0) {
+                    this.getVinosNotRest()
+                }
+            }
+        })
+
     }
 
     getVinosRest() {
@@ -51,6 +69,14 @@ export default class ModalVinos extends Component {
             .done();
     }
 
+    async getVinosNotRest() {
+        this.props.vinos.map((vino) => {
+            this.state.vinos.push(vino)
+
+            this.Add_New_View_Function(vino)
+        })
+    }
+
     onClickHide = () => {
         this.props.callback(false)
         this.props.callback2(this.state.vinos)
@@ -61,7 +87,7 @@ export default class ModalVinos extends Component {
 
         let New_Added_View_Value = {Array_Value_Index: this.Array_Value_Index}
 
-        const params = [this.Array_Value_Index, items]
+        let params = [this.Array_Value_Index, items]
 
         this.setState({ViewArray: [...this.state.ViewArray, params]}, () => {
             Animated.timing(
@@ -72,16 +98,22 @@ export default class ModalVinos extends Component {
                     useNativeDriver: true
                 }
             ).start(() => {
-                this.Array_Value_Index = this.Array_Value_Index + 1;
+
 
                 this.setState({Disable_Button: false});
             });
         });
+        this.Array_Value_Index = this.Array_Value_Index + 1;
+        if (this.props.vinos.length > 0) {
+            this.state.ViewArray.push(params)
+        }
 
     }
 
     updateQuantity = (index, cantidad) => {
         this.state.vinos[index].cantidad = cantidad
+        this.forceUpdate()
+        //this.getVinosNotRest()
     }
 
     render() {
@@ -101,6 +133,9 @@ export default class ModalVinos extends Component {
 
             if (vino != null) {
                 var background = '#FF0000';
+                if (vino.cantidad != undefined) {
+                    background = '#14CC30'
+                }
                 var estadoActual = 'En Espera';
 
                 return(

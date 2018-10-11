@@ -318,6 +318,7 @@ class Pedidos extends Component {
                     }}>
                     <ModalVinos
                         entrega={this.state.entregaSelected}
+                        vinos={this.state.selectedItems}
                         callback={this.setModalVisible}
                         callback2={this.updateVinosList}
                     />
